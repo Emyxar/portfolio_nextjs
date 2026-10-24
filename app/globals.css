@@ -1,26 +1,240 @@
+
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ========================================
+   Theme: Colors, fonts and animations
+   ======================================== */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+@theme {
+  /* Ink palette */
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-750: #2a3547;
+  --color-ink-800: #1e293b;
+  --color-ink-850: #172033;
+  --color-ink-900: #0f172a;
+  --color-ink-950: #020617;
+
+  /* Accent palette */
+  --color-accent-50: #ecfdf5;
+  --color-accent-100: #d1fae5;
+  --color-accent-200: #a7f3d0;
+  --color-accent-300: #6ee7b7;
+  --color-accent-400: #34d399;
+  --color-accent-500: #10b981;
+  --color-accent-600: #059669;
+  --color-accent-700: #047857;
+  --color-accent-800: #065f46;
+  --color-accent-900: #064e3b;
+
+  /* Fonts from next/font */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Custom easing */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@media (prefers-color-scheme: dark) {
+/* ========================================
+   Base styles
+   ======================================== */
+
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-ink-950 text-ink-100 font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-accent-500/30 text-accent-100;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-ink-950;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-ink-700 rounded-full border-2 border-solid border-ink-950;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-ink-600;
+  }
+
+  /* Headings */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight;
+    line-height: 1.2;
+  }
+
+  /* Keyboard accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-400 ring-offset-2 ring-offset-ink-950 rounded-md;
+  }
+
+  /* Consistent form controls */
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ========================================
+   Reusable components
+   ======================================== */
+
+@layer components {
+  /* Container */
+  .container-px {
+    @apply px-5 sm:px-8 lg:px-12;
+  }
+
+  /* Section spacing */
+  .section-y {
+    @apply py-20 md:py-28 lg:py-32;
+  }
+
+  /* Small uppercase section label */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-mono font-medium uppercase tracking-widest text-accent-400;
+  }
+
+  /* Section heading */
+  .section-title {
+    @apply text-3xl sm:text-4xl lg:text-5xl font-semibold text-ink-50;
+  }
+
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent-500 px-5 py-3 text-sm font-medium text-ink-950 transition-all duration-300 ease-smooth hover:bg-accent-400 active:scale-[0.98];
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 30px -6px rgba(16, 184, 122, 0.6);
+  }
+
+  /* Secondary / ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-ink-600 bg-ink-800/60 px-5 py-3 text-sm font-medium text-ink-100 transition-all duration-300 ease-smooth hover:border-ink-500 hover:bg-ink-750 active:scale-[0.98];
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-xl border border-ink-700/80 bg-ink-850/80 transition-all duration-300 ease-smooth;
+  }
+
+  .card-hover {
+    @apply hover:border-ink-600 hover:bg-ink-800/80 hover:-translate-y-1;
+  }
+
+  /* Muted links */
+  .link-muted {
+    @apply text-ink-300 transition-colors duration-200 hover:text-ink-50;
+  }
+
+  /* Section divider */
+  .divider {
+    @apply h-px w-full bg-gradient-to-r from-transparent via-ink-700 to-transparent;
+  }
+}
+
+/* ========================================
+   Reveal-on-scroll animations
+   ======================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Optional reveal delay via data attribute */
+.reveal[data-reveal-delay="80"] {
+  --reveal-delay: 80ms;
+}
+
+.reveal[data-reveal-delay="160"] {
+  --reveal-delay: 160ms;
+}
+
+.reveal[data-reveal-delay="240"] {
+  --reveal-delay: 240ms;
+}
+
+.reveal[data-reveal-delay="320"] {
+  --reveal-delay: 320ms;
+}
+
+/* ========================================
+   Reduced motion accessibility
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    will-change: auto;
+  }
 }
