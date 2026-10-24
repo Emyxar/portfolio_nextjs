@@ -24,7 +24,7 @@ jobs:
           script: |
             set -eu
 
-            cd /home/prom/portfolio_next
+            cd /home/prom/portfolio_nextjs
 
             git fetch origin main
             git reset --hard origin/main
