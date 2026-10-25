@@ -3,11 +3,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: https://me.emyxar.ru
     container_name: portfolio-nextjs
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 3000
       HOSTNAME: 0.0.0.0
+      NEXT_PUBLIC_SITE_URL: https://me.emyxar.ru
     ports:
       - "3000:3000"

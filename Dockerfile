@@ -17,6 +17,10 @@ COPY . .
 
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Inlined into the client/server bundle at build time
+ARG NEXT_PUBLIC_SITE_URL=https://me.emyxar.ru
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+
 RUN npm run build
 
 
